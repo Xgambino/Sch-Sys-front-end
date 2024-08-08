@@ -10,7 +10,7 @@ const Chat = () => {
 
     useEffect(() => {
         socket.on('message', (msg) => {
-            setMessages((prevMessages) => [...prevMessages, msg]);
+            setMessages((prevMessages) => [...prevMessages, { content: msg, type: msg.startsWith('Automated') ? 'automated' : 'user' }]);
         });
 
         return () => socket.off('message');
@@ -27,7 +27,12 @@ const Chat = () => {
         <div className="chat-container">
             <div className="messages-container">
                 {messages.map((msg, index) => (
-                    <div key={index} className="message">{msg}</div>
+                    <div
+                        key={index}
+                        className={`message ${msg.type}`}
+                    >
+                        {msg.content}
+                    </div>
                 ))}
             </div>
             <div className="input-container">
